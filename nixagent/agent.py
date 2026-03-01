@@ -18,13 +18,25 @@ def get_mcp_manager(config_path="mcp.json"):
 class Agent:
     def __init__(self, name: str, system_prompt: str, model: str = None, 
                  custom_tools: dict = None, custom_tool_defs: list = None,
-                 mcp_config_path: str = "mcp.json"):
+                 mcp_config_path: str = "mcp.json",
+                 use_builtin_tools: bool = True,
+                 disabled_tools: list = None):
         self.name = name
         self.system_prompt = system_prompt
         self.model = model or os.getenv("MODEL", "gpt-4o")
         self.messages = [{"role": "system", "content": system_prompt}]
-        self.tools = AVAILABLE_TOOLS.copy()
-        self.tool_defs = TOOL_DEFINITIONS.copy()
+        
+        if use_builtin_tools:
+            self.tools = AVAILABLE_TOOLS.copy()
+            self.tool_defs = TOOL_DEFINITIONS.copy()
+        else:
+            self.tools = {}
+            self.tool_defs = []
+            
+        if disabled_tools:
+            for d_tool in disabled_tools:
+                self.tools.pop(d_tool, None)
+            self.tool_defs = [td for td in self.tool_defs if td["function"]["name"] not in disabled_tools]
         
         if custom_tools:
             self.tools.update(custom_tools)
