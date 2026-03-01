@@ -4,7 +4,7 @@ This guide explains how to manage environment variables for your autonomous Agen
 
 ## 🎯 Overview
 
-The Local Agent Toolkit utilizes pure `requests` and a unified JSON configuration layer to power agnostic capabilities across providers (OpenAI, Gemini, Vertex AI, Groq, Ollama). 
+The `nixagent` package utilizes pure `requests` and a unified JSON configuration layer to power agnostic capabilities across providers (OpenAI, Gemini, Vertex AI, Groq, Ollama). 
 
 All configurations start at your project's `.env` or system environment flags.
 

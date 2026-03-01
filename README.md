@@ -1,9 +1,9 @@
-# Local Agent Toolkit
+# nixagent
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A generic, multipurpose Local Agent Toolkit in Python. This framework is completely agnostic to specific use cases and architectures, serving as a robust foundation for building autonomous, collaborative AI agents that can manage their own context, interface with each other, and securely use external tools. 
+A generic, multipurpose nixagent library in Python. This framework is completely agnostic to specific use cases and architectures, serving as a robust foundation for building autonomous, collaborative AI agents that can manage their own context, interface with each other, and securely use external tools. 
 
 ## 🚀 Quick Start
 
@@ -31,7 +31,7 @@ python app.py "Analyze the code structure" --no-save
 ### Python Library Usage
 
 ```python
-from local_agent_toolkit import Agent
+from nixagent import Agent
 
 # Initialize the core agent
 agent = Agent(
@@ -56,7 +56,7 @@ print(result)
 ```text
 framework/
 ├── app.py                # Main CLI application
-├── local_agent_toolkit/  # Core Framework Mechanics
+├── nixagent/             # Core Framework Mechanics
 │   ├── __init__.py       # Library exports
 │   ├── agent.py          # Core contextual autonomous Agent
 │   ├── llm.py            # Central HTTP-based LLM orchestration
@@ -116,7 +116,7 @@ The framework's `MCPManager` automatically bootstraps all active MCP servers, pa
 Agents can securely establish communication networks.
 
 ```python
-from local_agent_toolkit import Agent
+from nixagent import Agent
 
 research_agent = Agent("Researcher", "You perform file system research.")
 writer_agent = Agent("Writer", "You answer questions accurately.")

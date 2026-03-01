@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Local PyPI Publishing Script for Local Agent Toolkit
+# Local PyPI Publishing Script for nixagent
 # This script helps you build and publish your package to PyPI
 
 set -e
 
-echo "🚀 Local Agent Toolkit - PyPI Publishing Script"
+echo "🚀 nixagent - PyPI Publishing Script"
 echo "================================================"
 
 if [[ "$VIRTUAL_ENV" == "" ]]; then
@@ -57,8 +57,8 @@ case $choice in
         twine upload --repository testpypi dist/*
         echo ""
         echo "✅ Published to Test PyPI!"
-        echo "🔗 View at: https://test.pypi.org/project/local-agent-toolkit/"
-        echo "📋 Test installation: pip install -i https://test.pypi.org/simple/ local-agent-toolkit"
+        echo "🔗 View at: https://test.pypi.org/project/nixagent/"
+        echo "📋 Test installation: pip install -i https://test.pypi.org/simple/ nixagent"
         ;;
     2)
         echo "📤 Publishing to Real PyPI..."
@@ -72,8 +72,8 @@ case $choice in
             twine upload dist/*
             echo ""
             echo "🎉 Published to PyPI!"
-            echo "🔗 View at: https://pypi.org/project/local-agent-toolkit/"
-            echo "📋 Install with: pip install local-agent-toolkit"
+            echo "🔗 View at: https://pypi.org/project/nixagent/"
+            echo "📋 Install with: pip install nixagent"
         else
             echo "❌ Publishing cancelled."
         fi

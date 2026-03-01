@@ -1,4 +1,4 @@
-# 🚀 Local Agent Toolkit - PyPI Publishing Guide
+# 🚀 nixagent - PyPI Publishing Guide
 
 Your framework is now ready for packaging and publishing.
 
@@ -19,7 +19,7 @@ Your framework is now ready for packaging and publishing.
 
 ### Prerequisites
 1. **PyPI Account**: Register at [pypi.org](https://pypi.org/account/register/).
-2. **API Token**: Generate at [pypi.org/manage/account/token/](https://pypi.org/manage/account/token/). Ensure it has permissions to upload packages (you might need to name the package something unique if `local-agent-toolkit` is taken).
+2. **API Token**: Generate at [pypi.org/manage/account/token/](https://pypi.org/manage/account/token/). Ensure it has permissions to upload packages (you might need to name the package something unique if `nixagent` is taken).
 
 ### Publishing Procedure
 
@@ -49,10 +49,10 @@ twine upload dist/*
 
 ## 📦 Utilizing Modules After Publishing
 
-Anyone on the internet can then leverage the entire local-agent-toolkit ecosystem via Pip.
+Anyone on the internet can then leverage the entire nixagent ecosystem via Pip.
 
 ```bash
-pip install local-agent-toolkit
+pip install nixagent
 ```
 
 ```python
@@ -81,6 +81,6 @@ You can point these right at Local AI / VLLM / Groq or standard Azure/AWS Bedroc
 
 ## 🎯 Next Steps
 
-1. **Verify the Project Name**: Head over to `setup.py` and `pyproject.toml` and verify the package name `name="local-agent-toolkit"`.
+1. **Verify the Project Name**: Head over to `setup.py` and `pyproject.toml` and verify the package name `name="nixagent"`.
 2. **Commit Updates**: `git add . && git commit -m "chore: prep for release"`
 3. **Execute Build**: Run the wheel packaging and upload with `twine`.

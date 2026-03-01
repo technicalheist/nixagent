@@ -16,8 +16,8 @@ setup(
     author_email="contact@technicalheist.com",
     url="https://technicalheist.com",
     project_urls={
-        "Bug Reports": "https://github.com/technicalheist/local-agent-toolkit/issues",
-        "Source": "https://github.com/technicalheist/local-agent-toolkit",
+        "Bug Reports": "https://github.com/technicalheist/nixagent/issues",
+        "Source": "https://github.com/technicalheist/nixagent",
     },
     packages=find_packages(include=["nixagent", "nixagent.*"]),
     py_modules=["app"],

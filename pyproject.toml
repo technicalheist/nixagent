@@ -42,8 +42,8 @@ dev = [
 
 [project.urls]
 Homepage = "https://technicalheist.com"
-Repository = "https://github.com/technicalheist/local-agent-toolkit"
-Issues = "https://github.com/technicalheist/local-agent-toolkit/issues"
+Repository = "https://github.com/technicalheist/nixagent"
+Issues = "https://github.com/technicalheist/nixagent/issues"
 
 [project.scripts]
 local-agent = "app:main"
