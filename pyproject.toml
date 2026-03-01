@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nixagent"
+version = "1.1"
+description = "A sophisticated AI agent toolkit supporting multiple AI providers with tool calling capabilities."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "TechnicalHeist", email = "contact@technicalheist.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = ["ai", "agent", "toolkit", "ollama", "openai", "tool-calling", "automation"]
+requires-python = ">=3.8"
+dependencies = [
+    "python-dotenv>=0.19.0",
+    "requests>=2.25.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.0",
+    "flake8>=3.8",
+    "build>=0.8.0",
+    "twine>=4.0.0"
+]
+
+[project.urls]
+Homepage = "https://technicalheist.com"
+Repository = "https://github.com/technicalheist/local-agent-toolkit"
+Issues = "https://github.com/technicalheist/local-agent-toolkit/issues"
+
+[project.scripts]
+local-agent = "app:main"
+
+[tool.setuptools]
+packages = ["nixagent", "nixagent.tools"]
+py-modules = ["app"]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.txt", "*.yml", "*.yaml"]
+
+
