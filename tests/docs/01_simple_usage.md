@@ -6,12 +6,13 @@ The `nixagent` library makes it incredibly easy to configure and deploy autonomo
 `nixagent` bypasses heavy provider-specific SDKs and uses pure HTTP requests (following standard OpenAI JSON format payload schemas). To set it up, create a `.env` file where your python script executes:
 
 ```bash
-API_KEY=your_api_key_here
-API_BASE_URL=https://api.openai.com/v1
-MODEL=gpt-4o
+PROVIDER=openai
+OPENAI_API_KEY=your_api_key_here
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_MODEL=gpt-4o
 ```
 
-*Note: You can route this to Ollama, Groq, Vertex AI or any other API that speaks the OpenAI schema standard by simply updating the `API_BASE_URL`.*
+*Note: You can easily switch to `PROVIDER=anthropic`, `PROVIDER=gemini`, or `PROVIDER=vertex` and configure their respective variables (`ANTHROPIC_API_KEY`, `VERTEX_API_KEY`, etc.). The framework seamlessly understands the providers.*
 
 ### Basic Agent Invocation
 Once your environment variables are set, you can interact programmatically with your agent:

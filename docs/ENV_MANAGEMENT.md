@@ -12,19 +12,33 @@ All configurations start at your project's `.env` or system environment flags.
 
 ### Core Connection Methods
 
-We rely on three primary fields: `API_BASE_URL`, `API_KEY`, and `MODEL`. This conforms automatically to the wide ecosystem of standard APIs.
+We rely on identifying the provider `PROVIDER` alongside configuring the specific `BASE_URL`, `API_KEY`, and `MODEL` fields for that provider. 
 
 Place this `.env` inside your working directory alongside `app.py`:
 
 ```bash
-# Core API Key for the desired AI provider
-API_KEY=your_key_here
+# LLM Provider (openai, anthropic, gemini, or vertex)
+PROVIDER=openai
 
-# Base URL for the OpenAI compatible endpoint
-API_BASE_URL=https://api.openai.com/v1
+# OpenAI Configuration
+OPENAI_API_KEY=your_key_here
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_MODEL=gpt-4o
 
-# The model name to use for generating responses
-MODEL=gpt-4o
+# Anthropic Configuration
+ANTHROPIC_API_KEY=your_anthropic_key_here
+ANTHROPIC_BASE_URL=https://api.anthropic.com/v1
+ANTHROPIC_MODEL=claude-3-opus-20240229
+
+# Gemini Configuration
+GEMINI_API_KEY=your_gemini_key_here
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+GEMINI_MODEL=gemini-2.5-flash
+
+# Vertex AI Configuration
+VERTEX_API_KEY=your_vertex_api_key_here
+VERTEX_BASE_URL=https://aiplatform.googleapis.com/v1
+VERTEX_MODEL=gemini-2.5-flash-lite
 
 # Tool call safety depth
 MAX_ITERATIONS=25
@@ -34,13 +48,13 @@ If you are using **Ollama** locally, your setup looks like this:
 
 ```bash
 # Core API Key
-API_KEY="ollama" 
+OPENAI_API_KEY="ollama" 
 
 # Base URL pointing to Ollama
-API_BASE_URL=http://localhost:11434/v1
+OPENAI_BASE_URL=http://localhost:11434/v1
 
 # The model name downloaded
-MODEL=llama3.2
+OPENAI_MODEL=llama3.2
 ```
 
 ### Extending System Configuration
@@ -48,9 +62,9 @@ MODEL=llama3.2
 You can also rely entirely on system flags dynamically in Linux/Mac or in CI/CD chains by skipping files completely:
 
 ```bash
-export API_KEY="sk-..."
-export API_BASE_URL="https://api.groq.com/openai/v1"
-export MODEL="llama3-groq-70b-8192-tool-use-preview"
+export OPENAI_API_KEY="sk-..."
+export OPENAI_BASE_URL="https://api.groq.com/openai/v1"
+export OPENAI_MODEL="llama3-groq-70b-8192-tool-use-preview"
 ```
 
 Then boot your application normally: `python app.py "What is 2+2?"`.
@@ -68,8 +82,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Set defaults
-ENV API_BASE_URL=https://api.openai.com/v1
-ENV MODEL=gpt-4o
+ENV OPENAI_BASE_URL=https://api.openai.com/v1
+ENV OPENAI_MODEL=gpt-4o
 
 CMD ["python", "app.py"]
 ```
@@ -85,7 +99,7 @@ echo "mcp.json" >> .gitignore # Hide proprietary tool connections
 ```
 
 ### 2. AWS Lambda and Secret Clouds
-Connect the `API_KEY` straight out of Secure Stores via direct code injections instead of relying entirely on `dotenv`:
+Connect the `OPENAI_API_KEY` straight out of Secure Stores via direct code injections instead of relying entirely on `dotenv`:
 
 ```python
 import os
@@ -95,7 +109,7 @@ import json
 client = boto3.client('secretsmanager')
 secret = client.get_secret_value(SecretId='core-agent-config')
 
-os.environ['API_KEY'] = json.loads(secret['SecretString'])['api_key']
+os.environ['OPENAI_API_KEY'] = json.loads(secret['SecretString'])['api_key']
 
 from lib import Agent
 agent = Agent("ProductionAgent", "You help users.")
@@ -105,9 +119,13 @@ agent = Agent("ProductionAgent", "You help users.")
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `API_KEY` | Provider API Key | `sk-proj-...` |
-| `API_BASE_URL` | Provider Base URL | `https://api.openai.com/v1` |
-| `MODEL` | Name of the hosted Model | `gpt-4o` |
+| `PROVIDER` | The LLM provider (openai, anthropic, gemini, vertex) | `openai` |
+| `OPENAI_API_KEY` | OpenAI API Key | `sk-proj-...` |
+| `OPENAI_BASE_URL` | Provider Base URL for OpenAI compatible APIs | `https://api.openai.com/v1` |
+| `OPENAI_MODEL` | Name of the hosted Model | `gpt-4o` |
+| `ANTHROPIC_...` | Standard Anthropic environment credentials | `sk-ant-...` |
+| `GEMINI_...` | Standard Gemini environment credentials | `AIza...` |
+| `VERTEX_...` | Standard Vertex AI API environment credentials | `AQ.Ab...` |
 | `MAX_ITERATIONS` | Safety Loop Interrupter | `25` |
 | `LOG_LEVEL` | Application logging depth | `INFO` / `DEBUG` |
 | `LOG_FILE` | Default stdout capture log | `agent.log` |

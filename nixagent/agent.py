@@ -20,10 +20,21 @@ class Agent:
                  custom_tools: dict = None, custom_tool_defs: list = None,
                  mcp_config_path: str = "mcp.json",
                  use_builtin_tools: bool = True,
-                 disabled_tools: list = None):
+                 disabled_tools: list = None,
+                 provider: str = None):
         self.name = name
         self.system_prompt = system_prompt
-        self.model = model or os.getenv("MODEL", "gpt-4o")
+        self.provider = provider or os.getenv("PROVIDER", "openai")
+        
+        if self.provider.lower() == "anthropic":
+            self.model = model or os.getenv("ANTHROPIC_MODEL", "claude-3-opus-20240229")
+        elif self.provider.lower() == "gemini":
+            self.model = model or os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        elif self.provider.lower() == "vertex":
+            self.model = model or os.getenv("VERTEX_MODEL", "gemini-2.5-flash-lite")
+        else:
+            self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o")
+            
         self.messages = [{"role": "system", "content": system_prompt}]
         
         if use_builtin_tools:
@@ -94,6 +105,7 @@ class Agent:
                     messages=self.messages,
                     tools=self.tool_defs if self.tool_defs else None,
                     model=self.model,
+                    provider=self.provider,
                     stream=True
                 )
                 
@@ -214,6 +226,7 @@ class Agent:
                     messages=self.messages,
                     tools=self.tool_defs if self.tool_defs else None,
                     model=self.model,
+                    provider=self.provider,
                     stream=False
                 )
                 
