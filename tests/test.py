@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from nixagent.agent import Agent
+from nixagent import Agent
 
 def calculate_sqrt(number: float) -> float:
     return number ** 0.5

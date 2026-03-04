@@ -40,6 +40,11 @@ VERTEX_API_KEY=your_vertex_api_key_here
 VERTEX_BASE_URL=https://aiplatform.googleapis.com/v1
 VERTEX_MODEL=gemini-2.5-flash-lite
 
+# Qwen Configuration
+QWEN_EMAIL=your_email_here
+QWEN_PASSWORD=your_password_here
+QWEN_MODEL=qwen3.5-plus
+
 # Tool call safety depth
 MAX_ITERATIONS=25
 ```
@@ -119,13 +124,14 @@ agent = Agent("ProductionAgent", "You help users.")
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `PROVIDER` | The LLM provider (openai, anthropic, gemini, vertex) | `openai` |
+| `PROVIDER` | The LLM provider (openai, anthropic, gemini, vertex, qwen) | `openai` |
 | `OPENAI_API_KEY` | OpenAI API Key | `sk-proj-...` |
 | `OPENAI_BASE_URL` | Provider Base URL for OpenAI compatible APIs | `https://api.openai.com/v1` |
 | `OPENAI_MODEL` | Name of the hosted Model | `gpt-4o` |
 | `ANTHROPIC_...` | Standard Anthropic environment credentials | `sk-ant-...` |
 | `GEMINI_...` | Standard Gemini environment credentials | `AIza...` |
 | `VERTEX_...` | Standard Vertex AI API environment credentials | `AQ.Ab...` |
+| `QWEN_...` | Standard Qwen Web UI credentials | `user@email...` |
 | `MAX_ITERATIONS` | Safety Loop Interrupter | `25` |
 | `LOG_LEVEL` | Application logging depth | `INFO` / `DEBUG` |
 | `LOG_FILE` | Default stdout capture log | `agent.log` |

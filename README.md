@@ -60,7 +60,14 @@ framework/
 │   ├── __init__.py       # Library exports
 │   ├── agent.py          # Core contextual autonomous Agent
 │   ├── llm.py            # Central HTTP-based LLM orchestration
+│   ├── logger.py         # Central system execution logger
 │   ├── mcp.py            # Model Context Protocol definition and bindings
+│   ├── providers/        # LLM Vendor specific HTTP adapters
+│   │   ├── openai.py
+│   │   ├── anthropic.py
+│   │   ├── gemini.py
+│   │   ├── vertex.py
+│   │   └── qwen.py
 │   └── tools/            # Default Native Tools
 │       ├── __init__.py   # Tool bindings & descriptions
 │       ├── cmd.py        # Subprocess shell extensions
@@ -100,11 +107,17 @@ VERTEX_API_KEY=your_vertex_api_key_here
 VERTEX_BASE_URL=https://aiplatform.googleapis.com/v1
 VERTEX_MODEL=gemini-2.5-flash-lite
 
+# Qwen Configuration
+QWEN_EMAIL=your_email_here
+QWEN_PASSWORD=your_password_here
+QWEN_MODEL=qwen3.5-plus
+
 # Tool and Processing Configuration
 MAX_ITERATIONS=25
 
 # Logging Configuration
 LOG_LEVEL=INFO
+LOG_FILE=agent.log  # (Optional) Route all agent tool execution traces to this file instead of stdout
 ```
 
 ## 🔌 Using MCP Servers

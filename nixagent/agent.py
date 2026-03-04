@@ -1,9 +1,10 @@
 import os
 import json
-from typing import List, Dict, Any, Callable
+from typing import List, Dict, Any, Callable, Optional
 from .llm import call_llm
 from .tools import AVAILABLE_TOOLS, TOOL_DEFINITIONS
 from .mcp import MCPManager
+from .logger import logger
 
 _global_mcp_managers = {}
 
@@ -16,14 +17,16 @@ def get_mcp_manager(config_path="mcp.json"):
     return _global_mcp_managers[config_path]
 
 class Agent:
-    def __init__(self, name: str, system_prompt: str, model: str = None, 
+    def __init__(self, name: str, system_prompt: str, model: str = None,
                  custom_tools: dict = None, custom_tool_defs: list = None,
                  mcp_config_path: str = "mcp.json",
                  use_builtin_tools: bool = True,
                  disabled_tools: list = None,
-                 provider: str = None):
+                 provider: str = None,
+                 verbose: bool = False):
         self.name = name
         self.system_prompt = system_prompt
+        self.verbose = verbose
         self.provider = provider or os.getenv("PROVIDER", "openai")
         
         if self.provider.lower() == "anthropic":
@@ -32,6 +35,8 @@ class Agent:
             self.model = model or os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
         elif self.provider.lower() == "vertex":
             self.model = model or os.getenv("VERTEX_MODEL", "gemini-2.5-flash-lite")
+        elif self.provider.lower() == "qwen":
+            self.model = model or os.getenv("QWEN_MODEL", "qwen3.5-plus")
         else:
             self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o")
             
@@ -70,6 +75,43 @@ class Agent:
 
         self.agents_in_network = {}
 
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+
+    def _vprint(self, *args, **kwargs):
+        """Print only when verbose mode is enabled."""
+        if self.verbose:
+            print(*args, **kwargs)
+
+    def _print_iteration(self, i: int, mode: str = ""):
+        label = f"[{self.name}] ── Iteration {i+1}"
+        if mode:
+            label += f" ({mode})"
+        self._vprint(f"\n{'─' * 60}")
+        self._vprint(label)
+        self._vprint(f"{'─' * 60}")
+
+    def _print_llm_message(self, content: str):
+        if content and content.strip():
+            self._vprint("\n💬 Assistant:")
+            self._vprint(content.strip())
+
+    def _print_tool_call(self, tool_name: str, tool_args: dict):
+        self._vprint(f"\n🔧 Tool Call  → {tool_name}")
+        if tool_args:
+            try:
+                self._vprint(f"   Args: {json.dumps(tool_args, indent=6, ensure_ascii=False)}")
+            except Exception:
+                self._vprint(f"   Args: {tool_args}")
+
+    def _print_tool_result(self, tool_name: str, result: str):
+        self._vprint(f"\n📤 Tool Result ← {tool_name}")
+        # Truncate very long results in verbose output to keep it readable
+        display = result if len(result) <= 1000 else result[:1000] + "\n   ... (truncated)"
+        for line in display.splitlines():
+            self._vprint(f"   {line}")
+
     def register_collaborator(self, agent_instance):
         """Allows agents to talk to each other."""
         self.agents_in_network[agent_instance.name] = agent_instance
@@ -97,9 +139,10 @@ class Agent:
 
     def _run_stream(self, user_prompt: str, max_iterations: int = 15):
         self.messages.append({"role": "user", "content": user_prompt})
-        
+
         for i in range(max_iterations):
-            print(f"[{self.name}] Iteration {i+1} (Streaming)")
+            logger.info(f"[{self.name}] Iteration {i+1} (Streaming)")
+            self._print_iteration(i, mode="Streaming")
             try:
                 response = call_llm(
                     messages=self.messages,
@@ -156,16 +199,21 @@ class Agent:
                 assistant_msg = {"role": role}
                 if text_content:
                     assistant_msg["content"] = text_content
-                
+
                 tool_calls_list = [tool_calls_dict[k] for k in sorted(tool_calls_dict.keys())]
                 if tool_calls_list:
                     assistant_msg["tool_calls"] = tool_calls_list
                 else:
                     if "content" not in assistant_msg:
                         assistant_msg["content"] = ""
-                        
+
                 self.messages.append(assistant_msg)
-                
+
+                # Verbose: show streamed text (already yielded chunk-by-chunk;
+                #          show a summary label so the user knows what was streamed)
+                if text_content and self.verbose:
+                    self._vprint("\n💬 Assistant: (streamed above)")
+
                 if not tool_calls_list:
                     return
                     
@@ -176,20 +224,25 @@ class Agent:
                         tool_args = json.loads(tool_args_str)
                     except json.JSONDecodeError:
                         tool_args = {}
-                    
+
+                    self._print_tool_call(tool_name, tool_args)
+
                     if tool_name not in self.tools:
-                        print(f"[{self.name}] Tool '{tool_name}' not found.")
+                        logger.warning(f"[{self.name}] Tool '{tool_name}' not found.")
+                        err_msg = f"Error: Tool '{tool_name}' not found."
+                        self._print_tool_result(tool_name, err_msg)
                         self.messages.append({
                             "role": "tool",
                             "name": tool_name,
-                            "content": f"Error: Tool '{tool_name}' not found.",
+                            "content": err_msg,
                             "tool_call_id": tool_call["id"]
                         })
                         continue
-                        
-                    print(f"[{self.name}] Calling {tool_name}")
+
+                    logger.info(f"[{self.name}] Calling {tool_name}")
                     try:
                         tool_output = self.tools[tool_name](**tool_args)
+                        self._print_tool_result(tool_name, str(tool_output))
                         self.messages.append({
                             "role": "tool",
                             "name": tool_name,
@@ -197,27 +250,30 @@ class Agent:
                             "tool_call_id": tool_call["id"]
                         })
                     except Exception as e:
-                        print(f"[{self.name}] Error executing tool '{tool_name}': {e}")
+                        logger.error(f"[{self.name}] Error executing tool '{tool_name}': {e}")
+                        err_msg = f"Error executing tool '{tool_name}': {e}"
+                        self._print_tool_result(tool_name, err_msg)
                         self.messages.append({
                             "role": "tool",
                             "name": tool_name,
-                            "content": f"Error executing tool '{tool_name}': {e}",
+                            "content": err_msg,
                             "tool_call_id": tool_call["id"]
                         })
-                        
+
             except Exception as e:
-                print(f"API error: {e}")
+                logger.error(f"API error: {e}")
                 yield f"\nAPI error: {e}"
                 return
 
     def run(self, user_prompt: str, max_iterations: int = 15, stream: bool = False):
         if stream:
             return self._run_stream(user_prompt, max_iterations)
-            
+
         self.messages.append({"role": "user", "content": user_prompt})
-        
+
         for i in range(max_iterations):
-            print(f"[{self.name}] Iteration {i+1}")
+            logger.info(f"[{self.name}] Iteration {i+1}")
+            self._print_iteration(i)
             try:
                 # Assuming call_llm handles streaming internally. 
                 # For this generic implementation we use standard sync response parsing.
@@ -231,10 +287,13 @@ class Agent:
                 )
                 
                 message = response['choices'][0]['message']
-                
+
                 # Append assistant message
                 self.messages.append(message)
-                
+
+                # Verbose: show LLM text response
+                self._print_llm_message(message.get("content", ""))
+
                 if not message.get("tool_calls"):
                     return message.get("content", "")
                     
@@ -245,20 +304,25 @@ class Agent:
                         tool_args = json.loads(tool_args_str)
                     except json.JSONDecodeError:
                         tool_args = {}
-                    
+
+                    self._print_tool_call(tool_name, tool_args)
+
                     if tool_name not in self.tools:
-                        print(f"[{self.name}] Tool '{tool_name}' not found.")
+                        logger.warning(f"[{self.name}] Tool '{tool_name}' not found.")
+                        err_msg = f"Error: Tool '{tool_name}' not found."
+                        self._print_tool_result(tool_name, err_msg)
                         self.messages.append({
                             "role": "tool",
                             "name": tool_name,
-                            "content": f"Error: Tool '{tool_name}' not found.",
+                            "content": err_msg,
                             "tool_call_id": tool_call["id"]
                         })
                         continue
-                        
-                    print(f"[{self.name}] Calling {tool_name}")
+
+                    logger.info(f"[{self.name}] Calling {tool_name}")
                     try:
                         tool_output = self.tools[tool_name](**tool_args)
+                        self._print_tool_result(tool_name, str(tool_output))
                         self.messages.append({
                             "role": "tool",
                             "name": tool_name,
@@ -266,16 +330,18 @@ class Agent:
                             "tool_call_id": tool_call["id"]
                         })
                     except Exception as e:
-                        print(f"[{self.name}] Error executing tool '{tool_name}': {e}")
+                        logger.error(f"[{self.name}] Error executing tool '{tool_name}': {e}")
+                        err_msg = f"Error executing tool '{tool_name}': {e}"
+                        self._print_tool_result(tool_name, err_msg)
                         self.messages.append({
                             "role": "tool",
                             "name": tool_name,
-                            "content": f"Error executing tool '{tool_name}': {e}",
+                            "content": err_msg,
                             "tool_call_id": tool_call["id"]
                         })
                         
             except Exception as e:
-                print(f"API error: {e}")
+                logger.error(f"API error: {e}")
                 return f"API error: {e}"
                 
         return "Agent could not complete task within limits."

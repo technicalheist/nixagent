@@ -3,6 +3,7 @@ import json
 import subprocess
 import threading
 from typing import Dict, Any, List
+from .logger import logger
 
 class MCPClient:
     """
@@ -126,9 +127,9 @@ class MCPManager:
                 try:
                     client.start()
                     self.servers[name] = client
-                    print(f"[MCP] Activated server '{name}'")
+                    logger.info(f"[MCP] Activated server '{name}'")
                 except Exception as e:
-                    print(f"[MCP] Failed to activate server '{name}': {e}")
+                    logger.error(f"[MCP] Failed to activate server '{name}': {e}")
                     
     def get_all_tools(self) -> List[Dict]:
         all_tools = []

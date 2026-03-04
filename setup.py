@@ -8,7 +8,7 @@ with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="nixagent",
-    version="1.5",
+    version="1.8",
     description="A sophisticated AI agent toolkit supporting multiple AI providers with tool calling capabilities.",
     long_description=long_description,
     long_description_content_type="text/markdown",

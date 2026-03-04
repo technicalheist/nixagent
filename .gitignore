@@ -19,6 +19,7 @@ lib64/
 parts/
 sdist/
 var/
+
 *.egg-info/
 .installed.cfg
 *.egg
@@ -73,6 +74,12 @@ coverage.xml
 
 # Local env files
 .env
+qwen_token.txt
 
 # MacOS
 .DS_Store
+
+# Experiments and local testing
+experiments/
+qwen_dump.txt
+test.md

@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from typing import List, Dict, Any, Optional
+from ..logger import logger
 
 class VertexStreamWrapper:
     def __init__(self, response):
@@ -123,7 +124,7 @@ def call_vertex(messages: List[Dict], tools: Optional[List[Dict]] = None,
         try:
             response.raise_for_status()
         except Exception as e:
-            print("Vertex API Error details:", response.text)
+            logger.error(f"Vertex API Error details: {response.text}")
             raise e
         return VertexStreamWrapper(response)
     else:
@@ -131,7 +132,7 @@ def call_vertex(messages: List[Dict], tools: Optional[List[Dict]] = None,
         try:
             response.raise_for_status()
         except Exception as e:
-            print("Vertex API Error details:", response.text)
+            logger.error(f"Vertex API Error details: {response.text}")
             raise e
             
         data = response.json()

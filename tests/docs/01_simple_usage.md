@@ -12,7 +12,7 @@ OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL=gpt-4o
 ```
 
-*Note: You can easily switch to `PROVIDER=anthropic`, `PROVIDER=gemini`, or `PROVIDER=vertex` and configure their respective variables (`ANTHROPIC_API_KEY`, `VERTEX_API_KEY`, etc.). The framework seamlessly understands the providers.*
+*Note: You can easily switch to `PROVIDER=anthropic`, `PROVIDER=gemini`, `PROVIDER=vertex`, or `PROVIDER=qwen` and configure their respective variables (`ANTHROPIC_API_KEY`, `QWEN_EMAIL`, etc.). The framework seamlessly understands the providers.*
 
 ### Basic Agent Invocation
 Once your environment variables are set, you can interact programmatically with your agent:
