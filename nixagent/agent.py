@@ -218,7 +218,7 @@ class Agent:
                     return
                     
                 for tool_call in tool_calls_list:
-                    tool_name = tool_call["function"]["name"]
+                    tool_name = tool_call["function"]["name"].strip()
                     tool_args_str = tool_call["function"]["arguments"]
                     try:
                         tool_args = json.loads(tool_args_str)

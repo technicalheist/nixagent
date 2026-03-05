@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixagent"
-version = "1.9"
+version = "1.10"
 description = "A sophisticated AI agent toolkit supporting multiple AI providers with tool calling capabilities."
 readme = "README.md"
 license = {text = "MIT"}
@@ -49,7 +49,7 @@ Issues = "https://github.com/technicalheist/nixagent/issues"
 local-agent = "app:main"
 
 [tool.setuptools]
-packages = ["nixagent", "nixagent.tools"]
+packages = ["nixagent", "nixagent.tools", "nixagent.providers"]
 py-modules = ["app"]
 
 [tool.setuptools.package-data]

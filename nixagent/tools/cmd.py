@@ -19,8 +19,10 @@ def execute_shell_command(command, working_directory=None):
             shell=True,
             capture_output=True,
             text=True,
+            encoding='utf-8',
+            errors='replace',
             cwd=working_directory,
-            timeout=30,
+            timeout=120,
         )
 
         return {
@@ -33,7 +35,7 @@ def execute_shell_command(command, working_directory=None):
     except subprocess.TimeoutExpired:
         return {
             "stdout": "",
-            "stderr": "Error: Command timed out after 30 seconds.",
+            "stderr": "Error: Command timed out after 120 seconds.",
             "return_code": 124,
             "success": False,
         }
