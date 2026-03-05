@@ -108,7 +108,7 @@ TOOL_DEFINITIONS = [
         "type": "function",
         "function": {
             "name": "execute_shell_command",
-            "description": "Execute a shell command and return the output.",
+            "description": "Execute a shell command. IMPORTANT: To run in a specific directory, ALWAYS use the 'working_directory' argument instead of chaining a 'cd' command. Use double quotes (\") for file paths. For command chaining use '&&' on Windows and ';' on Linux/Mac.",
             "parameters": {
                 "type": "object",
                 "properties": {
