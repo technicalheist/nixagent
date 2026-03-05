@@ -26,7 +26,7 @@ def read_file(filepath):
     if not os.path.exists(filepath):
         return f"Error: File '{filepath}' not found."
     try:
-        with open(filepath, "r") as f:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
             return f.read()
     except Exception as e:
         return f"Error reading file '{filepath}': {e}"
@@ -37,7 +37,7 @@ def write_file(filepath, content):
     """
     try:
         os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
         return f"File '{filepath}' written successfully."
     except Exception as e:
