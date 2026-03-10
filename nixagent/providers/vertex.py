@@ -67,18 +67,23 @@ def call_vertex(messages: List[Dict], tools: Optional[List[Dict]] = None,
                         args = json.loads(fn["arguments"]) if isinstance(fn["arguments"], str) else fn["arguments"]
                     except json.JSONDecodeError:
                         args = {}
-                    parts.append({
+                    
+                    part = {
                         "functionCall": {
                             "name": fn["name"],
                             "args": args
                         }
-                    })
+                    }
+                    if "thought_signature" in tc:
+                        part["thoughtSignature"] = tc["thought_signature"]
+                    
+                    parts.append(part)
             if not parts:
                 parts.append({"text": ""})
             vertex_messages.append({"role": "model", "parts": parts})
         elif role == "tool":
             vertex_messages.append({
-                "role": "function",
+                "role": "user",
                 "parts": [{
                     "functionResponse": {
                         "name": m.get("name", "unknown_tool"),
@@ -153,14 +158,18 @@ def call_vertex(messages: List[Dict], tools: Optional[List[Dict]] = None,
                 assistant_content += part["text"]
             if "functionCall" in part:
                 fc = part["functionCall"]
-                tool_calls.append({
+                tool_call = {
                     "id": f"call_{fc['name']}",
                     "type": "function",
                     "function": {
                         "name": fc["name"],
                         "arguments": json.dumps(fc.get("args", {}))
                     }
-                })
+                }
+                if "thoughtSignature" in part:
+                    tool_call["thought_signature"] = part["thoughtSignature"]
+                    
+                tool_calls.append(tool_call)
         
         message_info = {
             "role": "assistant",
