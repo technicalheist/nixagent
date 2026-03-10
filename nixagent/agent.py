@@ -112,13 +112,13 @@ class Agent:
         for line in display.splitlines():
             self._vprint(f"   {line}")
 
-    def register_collaborator(self, agent_instance):
+    def register_collaborator(self, agent_instance, max_iterations: int = 10):
         """Allows agents to talk to each other."""
         self.agents_in_network[agent_instance.name] = agent_instance
         # Add a tool to communicate with this agent
         def communicate_with_agent(message: str) -> str:
             # Note: We run a sub-agent non-streaming and isolated iterations
-            return agent_instance.run(message, max_iterations=10, stream=False)
+            return agent_instance.run(message, max_iterations=max_iterations, stream=False)
             
         tool_name = f"ask_agent_{agent_instance.name}"
         self.tools[tool_name] = communicate_with_agent
