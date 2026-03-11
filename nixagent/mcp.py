@@ -122,8 +122,8 @@ class MCPManager:
             
         mcp_servers = config.get("mcpServers", {})
         for name, details in mcp_servers.items():
-            if details.get("active") is True:
-                client = MCPClient(details["command"], details.get("args", []))
+            if details.get("active", True):
+                client = MCPClient(details.get("command"), details.get("args", []))
                 try:
                     client.start()
                     self.servers[name] = client

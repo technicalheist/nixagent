@@ -1,1 +1,14 @@
-{"mcpServers": {}}
+{
+    "mcpServers": {
+        "browser-use": {
+            "type": "stdio",
+            "command": "docker",
+            "args": [
+                "run",
+                "--rm",
+                "-i",
+                "technicalheist/browser-mcp-server"
+            ]
+        }
+    }
+}
