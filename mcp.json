@@ -7,6 +7,8 @@
                 "run",
                 "--rm",
                 "-i",
+                "-v",
+                "${PWD}/screenshots:/app/screenshots",
                 "technicalheist/browser-mcp-server"
             ]
         }

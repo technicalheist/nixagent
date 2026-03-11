@@ -11,7 +11,8 @@ class MCPClient:
     """
     def __init__(self, command: str, args: List[str]):
         self.command = command
-        self.args = args
+        # Expand environment variables like $PWD in arguments
+        self.args = [os.path.expandvars(arg) for arg in args]
         self.process = None
         self._message_id = 1
         self._lock = threading.Lock()

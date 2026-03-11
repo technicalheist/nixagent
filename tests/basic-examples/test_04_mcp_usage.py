@@ -10,11 +10,12 @@ print(mcp_config_path)
 agent = Agent(
     name="DB_Agent",
     system_prompt="You are a helpful Browser assistant.",
-    mcp_config_path=mcp_config_path  
+    mcp_config_path=mcp_config_path,
+    verbose=True
 )
 
 if __name__ == "__main__":
     print("Running Test 04 - MCP JSON Dynamic Path Loading")
-    result = agent.run("Show me the list of tools you can use?")
+    result = agent.run("Open Amazon.in and search for Motorola Edge 60, tell me the price of the product. Take Screenshot of each page.")
     print("\n--- Output ---")
     print(result)
