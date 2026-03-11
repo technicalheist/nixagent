@@ -16,6 +16,9 @@ agent = Agent(
 
 if __name__ == "__main__":
     print("Running Test 04 - MCP JSON Dynamic Path Loading")
-    result = agent.run("Open Amazon.in and search for Motorola Edge 60, tell me the price of the product. Take Screenshot of each page.")
+    result = agent.run(
+        "Open Amazon.in and search for Motorola Edge 60, tell me the price of the product. Take Screenshot of each page.",
+        max_iterations=30
+    )
     print("\n--- Output ---")
     print(result)
