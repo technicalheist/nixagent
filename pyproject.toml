@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixagent"
-version = "1.17"
+version = "1.18"
 description = "A sophisticated AI agent toolkit supporting multiple AI providers with tool calling capabilities, enterprise state management, HITL, Graph routing, LangChain support, and structured outputs."
 readme = "README.md"
 license = {text = "MIT"}
