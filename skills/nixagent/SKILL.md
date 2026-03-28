@@ -145,7 +145,7 @@ coordinator.register_collaborator(writer)
 
 if __name__ == "__main__":
     response = coordinator.run("Ask the researcher for 3 facts about black holes, then send them to the writer to write an intro paragraph.")
-    
+
     print("\n--- Final Output ---")
     print(response)
 ```
@@ -287,17 +287,17 @@ When an Agent initializes with an MCP configuration path:
 
 | Tool | Description |
 |------|-------------|
-| `list_files(directory, recursive)` | Scans the directory and lists out localized hierarchy mapping structurally to identify structure logic inside unknown repositories. |
-| `list_files_by_pattern(directory, pattern, recursive)` | Deep Regex matching for identifying specific source files via system names (e.g., `*.py`). |
-| `read_file(filepath)` | Pulls direct source string content of targeted local documents directly into LLM sequence buffers. |
-| `write_file(filepath, content)` | Directly creates or wholly overwrites localized structures via standard OS hooks with strict encoding standards. |
-| `delete_file(filepath)` | Removes specific files or directory structures off the active filesystem context natively. |
-| `search_file_contents(directory, pattern, use_regex, recursive)` | Very robust grep-style internal searching mechanism. Used specifically by agents trying to traverse deep architectural scopes. |
-| `execute_shell_command(command, working_directory)` | Harnesses secure isolated `subprocess` execution sequences directly onto the hosted terminal environment. |
+| `list_files(directory, recursive)` | Scans the directory and lists out localized hierarchy mapping structurally. |
+| `list_files_by_pattern(directory, pattern, recursive)` | Deep Regex matching for identifying specific source files (e.g., `*.py`). |
+| `read_file(filepath)` | Pulls direct source string content of targeted local documents into LLM buffers. |
+| `write_file(filepath, content)` | Directly creates or wholly overwrites localized structures via standard OS hooks. |
+| `delete_file(filepath)` | Removes specific files or directory structures off the active filesystem natively. |
+| `search_file_contents(directory, pattern, use_regex, recursive)` | Robust grep-style internal searching across deep architectural scopes. |
+| `execute_shell_command(command, working_directory)` | Secure isolated `subprocess` execution sequences onto the hosted terminal environment. |
 
 ### Restricting Default Tools
 
-If you want an agent to operate *without* the built-in system tools (for example, a restricted writer agent), use the `use_builtin_tools=False` flag:
+If you want an agent to operate *without* the built-in system tools, use the `use_builtin_tools=False` flag:
 
 ```python
 restricted_agent = Agent(
@@ -339,8 +339,6 @@ python app.py
 
 ### Setting up Logging
 
-`nixagent` relies explicitly on safe environment configurations. You can optionally expose deep execution iteration logs to a specific local file by defining standard logger values inside the `.env`:
-
 ```bash
 LOG_LEVEL=DEBUG    # Can be INFO, DEBUG, ERROR, WARNING
 LOG_FILE=nix_debug.log
@@ -349,8 +347,6 @@ LOG_FILE=nix_debug.log
 ### Safety Mechanics (`MAX_ITERATIONS`)
 
 The framework operates as an autonomous multi-iteration orchestrator. If the model continually decides to chain functions together recursively, `nixagent` securely stops the logic execution automatically to prevent infinite API billing loops.
-
-You can modify this ceiling explicitly:
 
 ```bash
 # Default is 15. Set to higher value for extreme file-system operations
@@ -364,8 +360,6 @@ MAX_ITERATIONS=50
 ## 7. Streaming Responses
 
 `nixagent` supports real-time streaming responses via the `stream=True` parameter on `agent.run()`.
-
-### Usage
 
 ```python
 from dotenv import load_dotenv
@@ -436,35 +430,7 @@ agent = Agent(
 
 ---
 
-## Project Structure
-
-```text
-nixagent/
-├── app.py                # Main CLI application
-├── nixagent/             # Core Framework Mechanics
-│   ├── __init__.py       # Library exports
-│   ├── agent.py          # Core contextual autonomous Agent
-│   ├── llm.py            # Central HTTP-based LLM orchestration
-│   ├── logger.py         # Central system execution logger
-│   ├── mcp.py            # Model Context Protocol definition and bindings
-│   ├── providers/        # LLM Vendor specific HTTP adapters
-│   │   ├── openai.py
-│   │   ├── anthropic.py
-│   │   ├── gemini.py
-│   │   └── vertex.py
-│   └── tools/            # Default Native Tools
-│       ├── __init__.py   # Tool bindings & descriptions
-│       ├── cmd.py        # Subprocess shell extensions
-│       └── fs.py         # File system native operations
-├── mcp.json              # Model Context Protocol Server mapping
-├── requirements.txt      # Python dependencies
-└── .env                  # Operational mapping variables
-```
-
----
-
 ## Links
 
 - **PyPI:** https://pypi.org/project/nixagent/
 - **GitHub:** https://github.com/technicalheist/nixagent
-- **Issues:** https://github.com/technicalheist/nixagent/issues

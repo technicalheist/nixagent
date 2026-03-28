@@ -1,13 +1,11 @@
 import json
-import os
 from dotenv import load_dotenv
 from nixagent import Agent
 
 load_dotenv()
 
-# We will create a dummy mcp.json in the current directory if it doesn't exist just to test loading logic
 mcp_config = {
-  "mcpServers": {} # No active MCP servers for the safety of this isolated test loop!
+  "mcpServers": {}
 }
 with open("mcp.json", "w") as f:
     json.dump(mcp_config, f)

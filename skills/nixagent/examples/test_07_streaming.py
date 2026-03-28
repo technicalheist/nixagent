@@ -9,11 +9,10 @@ def main():
         name="StreamTest",
         system_prompt="You are a helpful assistant. Please tell a short story."
     )
-    
+
     print("Running Test 07 - Streaming Response")
-    # Tell a short story
     stream = agent.run("Write a 3 sentence story about a brave knight.", stream=True)
-    
+
     print("\n--- Start Stream ---")
     for chunk in stream:
         sys.stdout.write(chunk)
