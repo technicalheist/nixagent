@@ -1,0 +1,8 @@
+# Ignore everything by default
+*
+
+# Only include what matters for the skill
+!SKILL.md
+!examples/
+!examples/**
+!package.json

@@ -1,0 +1,33 @@
+{
+  "name": "@technicalheist/nixagent",
+  "version": "1.0.0",
+  "description": "A sophisticated, provider-agnostic AI agent framework skill for nixagent — supports OpenAI, Anthropic, Gemini, and Vertex AI with built-in tools, multi-agent collaboration, MCP integration, and streaming.",
+  "keywords": [
+    "skill",
+    "nixagent",
+    "ai",
+    "agent",
+    "openai",
+    "anthropic",
+    "gemini",
+    "vertex",
+    "mcp",
+    "tool-calling",
+    "automation",
+    "llm"
+  ],
+  "author": "TechnicalHeist <contact@technicalheist.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/technicalheist/nixagent"
+  },
+  "homepage": "https://github.com/technicalheist/nixagent",
+  "files": [
+    "SKILL.md",
+    "examples/"
+  ],
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing nixagent skill...'"
+  }
+}
