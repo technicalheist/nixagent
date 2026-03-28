@@ -2,6 +2,7 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![AI Skill](https://img.shields.io/badge/AI%20Skill-skills.sh-blueviolet)](https://github.com/technicalheist/nixagent/tree/main/skills/nixagent)
 
 A generic, multipurpose nixagent library in Python. This framework is completely agnostic to specific use cases and architectures, serving as a robust foundation for building autonomous, collaborative AI agents that can manage their own context, interface with each other, and securely use external tools. 
 
@@ -152,6 +153,35 @@ writer_agent.register_collaborator(research_agent)
 
 writer_agent.run("Ask the Researcher to find all text files and read them to me.")
 ```
+
+## 🤖 AI Skill
+
+`nixagent` is available as an installable **AI coding agent skill** — giving your AI assistant full knowledge of the framework, its API, and usage patterns.
+
+### Install the Skill
+
+```bash
+npx skills add technicalheist/nixagent
+```
+
+This installs the skill into your project's agent directories (Cursor, Copilot, Cline, Antigravity, and more) so your AI assistant can immediately understand and use `nixagent` without extra explanation.
+
+### What's Included
+
+The skill (`skills/nixagent/SKILL.md`) contains:
+- Full installation & environment setup guide
+- Documentation for all 7 core features
+- Provider-specific usage (OpenAI, Anthropic, Gemini, Vertex)
+- Code reference examples in `skills/nixagent/examples/`
+
+### Find the Skill
+
+| | |
+|--|--|
+| **GitHub** | [technicalheist/nixagent › skills/nixagent](https://github.com/technicalheist/nixagent/tree/main/skills/nixagent) |
+| **Skill Registry** | [skills.sh](https://skills.sh) |
+
+---
 
 ## 📄 License
 
